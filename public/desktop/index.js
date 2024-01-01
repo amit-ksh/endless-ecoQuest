@@ -5,7 +5,7 @@ let socket;
 let container;
 let obstacles = [];
 let crash = false;
-let score = 0;
+let score = 50;
 let scoreText = document.getElementById("score");
 let scoreInterval = null;
 let id = 0;
@@ -24,7 +24,8 @@ let car,
   obstacle,
   bike,
   curVehicle = "bike",
-  changeVehicleInterval = null;
+  changeVehicleInterval = null,
+  switchTimeout;
 let explodeSound;
 
 let bluetoothConnected = false;
@@ -116,16 +117,7 @@ function setupCarModel() {
       bike.name = "car";
 
       // scene.add(car);
-      renderer.render(scene, camera);
-
-      window.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowLeft" && car.position.x > -2 && !gameOver) {
-          car.position.x -= 0.1;
-        }
-        if (e.code === "ArrowRight" && car.position.x < 2 && !gameOver) {
-          car.position.x += 0.1;
-        }
-      });
+      // renderer.render(scene, camera);
       modelLoaded.car = true;
     },
     // called while loading is progressing
@@ -139,7 +131,7 @@ function setupCarModel() {
     // called when loading has errors
     function (error) {
       alert("An error occured while loading Car model! Refresh!");
-    }
+    },
   );
 }
 // Load & spawn bike model
@@ -169,31 +161,20 @@ function setupBikeModel() {
 
       scene.add(bike);
       renderer.render(scene, camera);
-
-      window.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowLeft" && bike.position.x > -2 && !gameOver) {
-          bike.position.x -= 0.1;
-        }
-        if (e.code === "ArrowRight" && bike.position.x < 2 && !gameOver) {
-          bike.position.x += 0.1;
-        }
-      });
       modelLoaded.bike = true;
     },
     // called while loading is progressing
     function (xhr) {
       if (!loadingEl) return;
-      loadingEl.querySelector(
-        "#bike"
-      ).innerHTML = `Loading bike model: <span>${(
-        (xhr.loaded / xhr.total) *
-        100
-      ).toFixed(2)}%</span>`;
+      loadingEl.querySelector("#bike").innerHTML =
+        `Loading bike model: <span>${((xhr.loaded / xhr.total) * 100).toFixed(
+          2,
+        )}%</span>`;
     },
     // called when loading has errors
     function (error) {
       alert("An error occured while loading Bike model! Refresh!");
-    }
+    },
   );
 }
 
@@ -215,23 +196,20 @@ function setupObstacleModel() {
       });
 
       modelLoaded.obstacle = true;
-
-      scene.add(obstacle);
     },
     // called while loading is progressing
     function (xhr) {
       if (!loadingEl) return;
-      loadingEl.querySelector(
-        "#obstacle"
-      ).innerHTML = `Loading obstacle model: <span>${(
-        (xhr.loaded / xhr.total) *
-        100
-      ).toFixed(2)}%</span>`;
+      loadingEl.querySelector("#obstacle").innerHTML =
+        `Loading obstacle model: <span>${(
+          (xhr.loaded / xhr.total) *
+          100
+        ).toFixed(2)}%</span>`;
     },
     // called when loading has errors
     function (error) {
       alert("An error occured while loading obstacle model! Refresh!");
-    }
+    },
   );
 }
 
@@ -257,7 +235,7 @@ function setupPlane() {
   });
   const wireframe = new THREE.LineSegments(
     wireframeGeometry,
-    wireframeMaterial
+    wireframeMaterial,
   );
 
   plane.add(wireframe);
@@ -289,6 +267,15 @@ function init() {
   renderer.render(scene, camera);
 
   window.addEventListener("resize", onWindowResize);
+
+  window.addEventListener("keyup", (e) => {
+    if (e.code === "ArrowLeft" && !gameOver) {
+      switchToCar();
+    }
+    if (e.code === "ArrowRight" && !gameOver) {
+      switchToBike();
+    }
+  });
 }
 
 function draw() {
@@ -340,10 +327,12 @@ function update() {
   // LEFT
   if (zOrientation > 0) {
     bike.position.x = Math.max(-2, bike.position.x - Math.abs(zOrientation));
+    car.position.x = Math.max(-2, car.position.x - Math.abs(zOrientation));
   }
   // RIGHT
   if (zOrientation < 0) {
     bike.position.x = Math.min(2, bike.position.x + Math.abs(zOrientation));
+    car.position.x = Math.max(2, car.position.x + Math.abs(zOrientation));
   }
 
   for (let i = 0; i < obstacles.length; i++) {
@@ -357,7 +346,7 @@ function update() {
     }
   }
 
-  if (score < 0 || score > 100) {
+  if (score <= 0 || score >= 100) {
     gameOver = true;
   }
 
@@ -369,14 +358,11 @@ function update() {
     if (obstacles[i].position.y < -20) {
       scene.remove(obstacles[i]);
       obstacles.splice(i, 1);
-      if (!crash) {
-        score += 1;
-      }
     } else {
       obstacles[i].position.y -= 0.05;
     }
   }
-  scoreText.innerText = "Score: " + Math.floor(score);
+  scoreText.innerText = "Pollution Level: " + Math.min(Math.floor(score), 100);
 }
 
 function getRandomArbitrary(min, max) {
@@ -389,7 +375,7 @@ function makeRandomCube() {
   newobstacle.position.set(
     getRandomArbitrary(-2, 2),
     getRandomArbitrary(50, 0),
-    0
+    0,
   );
 
   obstacles.push(newobstacle);
@@ -412,38 +398,63 @@ function displayCounter() {
     counterDiv.classList.add("fade-out");
     gameStarted = true;
     draw();
+
+    changeVehicleInterval = setInterval(() => {
+      vechilesModal.classList.remove("fade-out");
+
+      switchTimeout = setTimeout(() => {
+        if (curVehicle == "bike") switchToCar();
+        else switchToBike();
+        clearTimeout(switchTimeout);
+      }, 5 * 1000);
+    }, 10 * 1000);
+
+    scoreInterval = setInterval(() => {
+      if (curVehicle === "car") {
+        score += 1;
+      } else {
+        score -= 0.5;
+      }
+    }, 1000);
   }
 }
 
 let interval;
 
 const switchToCar = () => {
-  vechilesModal.classList.remove("fade-out");
+  clearTimeout(switchTimeout);
+  vechilesModal.classList.add("fade-out");
+  if (curVehicle == "car") return;
+
   curVehicle = "car";
 
   scene.remove(bike);
+  scene.add(car);
 };
 
 const switchToBike = () => {
-  vechilesModal.classList.remove("fade-out");
+  clearTimeout(switchTimeout);
+  vechilesModal.classList.add("fade-out");
+  if (curVehicle == "bike") return;
+
   curVehicle = "bike";
 
   scene.remove(car);
+  scene.add(bike);
 };
 
 window.onload = () => {
   if (!navigator.userAgentData.mobile) {
     let previousValue;
     connectMessage = document.getElementById("connect");
-    connectMessage.querySelector(
-      "p strong"
-    ).innerHTML = `${window.origin}/mobile`;
+    connectMessage.querySelector("p strong").innerHTML =
+      `${window.origin}/mobile`;
 
     explodeSound = document.getElementById("explode_sound");
     loadingEl = document.querySelector(".loader");
     audioBtn = document.querySelector("button.audio");
     gameOverModal = document.querySelector(".game-over-container");
-    vechilesModal = document.querySelector("#vehicles");
+    vechilesModal = document.querySelector(".vehicles");
 
     audioBtn.addEventListener("click", () => {
       if (sound.paused) {
@@ -464,6 +475,7 @@ window.onload = () => {
 
     socket.on("mobile orientation", (e) => {
       if (!bluetoothConnected) {
+        score = 50;
         bluetoothConnected = true;
         connectMessage.classList.add("fade-out");
 
@@ -472,23 +484,6 @@ window.onload = () => {
 
         interval = setInterval(function () {
           displayCounter();
-        }, 1000);
-
-        changeVehicleInterval = setInterval(() => {
-          vechilesModal.classList.remove("fade-out");
-
-          setTimeout(() => {
-            if (curVehicle == "bike") switchToCar();
-            else switchToBike();
-          }, 5 * 1000);
-        }, 10 * 1000);
-
-        scoreInterval = setInterval(() => {
-          if (curVehicle === "car") {
-            score += 2;
-          } else {
-            score -= 1;
-          }
         }, 1000);
       }
 
@@ -502,9 +497,9 @@ window.onload = () => {
 
 function reset() {
   crash = false;
-  score = 0;
   id = 0;
   counter = 3;
+  score = 50;
 
   gameStarted = false;
   gameOver = false;
@@ -527,7 +522,7 @@ function reset() {
   renderer.render(scene, camera);
   bike.position.x = 0;
 
-  gameOverModal.querySelector(".score").innerHTML = 0;
+  gameOverModal.querySelector(".score").innerHTML = score;
   gameOverModal.classList.add("fade-out");
 
   bluetoothConnected = false;

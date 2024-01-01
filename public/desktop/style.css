@@ -181,7 +181,6 @@ button.audio.playing {
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  color: rgb(200, 255, 255);
   opacity: 1;
   z-index: 10;
   transition: opacity 1s ease-out;
@@ -194,6 +193,7 @@ button.audio.playing {
 
 .vehicles p {
   font-size: 1.2rem;
+  color: rgb(200, 255, 255);
 }
 
 .vehicles p kbd {
@@ -205,10 +205,9 @@ button.audio.playing {
   gap: 2rem;
 }
 
-.vehicles img.picked {
-  border: 2px solid rgb(200, 255, 255);
-  padding: 10px;
-  border-radius: 8px;
+button {
+  background-color: transparent;
+  border: 0;
 }
 
 .game-over-container {
