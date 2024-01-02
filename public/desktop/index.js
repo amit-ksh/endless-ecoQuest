@@ -4,9 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 let socket;
 let container;
 let obstacles = [];
-let crash = false;
 let score = 50;
-let scoreText = document.getElementById("score");
 let scoreInterval = null;
 let id = 0;
 let counter = 3;
@@ -269,10 +267,11 @@ function init() {
   window.addEventListener("resize", onWindowResize);
 
   window.addEventListener("keyup", (e) => {
-    if (e.code === "ArrowLeft" && !gameOver) {
+    const canChangeVehicle = !vechilesModal.classList.contains("fade-out");
+    if (e.code === "ArrowLeft" && !gameOver && canChangeVehicle) {
       switchToCar();
     }
-    if (e.code === "ArrowRight" && !gameOver) {
+    if (e.code === "ArrowRight" && !gameOver && canChangeVehicle) {
       switchToBike();
     }
   });
@@ -289,7 +288,7 @@ function draw() {
       console.error("Error: Playing the sound" + e);
     }
 
-    gameOverModal.querySelector(".score").innerHTML = score;
+    gameOverModal.querySelector(".pollution").innerHTML = score;
     gameOverModal.classList.remove("fade-out");
 
     socket.emit("gameover");
@@ -325,6 +324,7 @@ function adjustVertices(offset) {
 // Game Update Function
 function update() {
   // LEFT
+  let crash = false;
   if (zOrientation > 0) {
     bike.position.x = Math.max(-2, bike.position.x - Math.abs(zOrientation));
     car.position.x = Math.max(-2, car.position.x - Math.abs(zOrientation));
@@ -332,19 +332,29 @@ function update() {
   // RIGHT
   if (zOrientation < 0) {
     bike.position.x = Math.min(2, bike.position.x + Math.abs(zOrientation));
-    car.position.x = Math.max(2, car.position.x + Math.abs(zOrientation));
+    car.position.x = Math.min(2, car.position.x + Math.abs(zOrientation));
   }
 
   for (let i = 0; i < obstacles.length; i++) {
-    const collision = bike.position.distanceTo(obstacles[i].position) < 0.35;
+    let collision = false;
 
-    if (collision) {
+    if (curVehicle === "bike") {
+      collision = bike.position.distanceTo(obstacles[i].position) < 0.4;
+    } else {
+      collision = car.position.distanceTo(obstacles[i].position) < 0.4;
+    }
+
+    if (collision && !obstacles[i].hit) {
       crash = true;
       score += 5;
+      obstacles[i].hit = true;
+      scene.remove(obstacles[i]);
     } else {
       crash = false;
     }
   }
+
+  score = Math.max(Math.min(100, Math.floor(score)), 0);
 
   if (score <= 0 || score >= 100) {
     gameOver = true;
@@ -362,7 +372,8 @@ function update() {
       obstacles[i].position.y -= 0.05;
     }
   }
-  scoreText.innerText = "Pollution Level: " + Math.min(Math.floor(score), 100);
+
+  document.documentElement.style.setProperty("--progress", `${score}%`);
 }
 
 function getRandomArbitrary(min, max) {
@@ -403,8 +414,7 @@ function displayCounter() {
       vechilesModal.classList.remove("fade-out");
 
       switchTimeout = setTimeout(() => {
-        if (curVehicle == "bike") switchToCar();
-        else switchToBike();
+        vechilesModal.classList.add("fade-out");
         clearTimeout(switchTimeout);
       }, 5 * 1000);
     }, 10 * 1000);
@@ -427,6 +437,7 @@ const switchToCar = () => {
   if (curVehicle == "car") return;
 
   curVehicle = "car";
+  car.position.x = bike.position.x;
 
   scene.remove(bike);
   scene.add(car);
@@ -438,10 +449,45 @@ const switchToBike = () => {
   if (curVehicle == "bike") return;
 
   curVehicle = "bike";
+  bike.position.x = car.position.x;
 
   scene.remove(car);
   scene.add(bike);
 };
+
+function reset() {
+  crash = false;
+  id = 0;
+  counter = 3;
+  score = 50;
+
+  gameStarted = false;
+  gameOver = false;
+  zOrientation = 0;
+
+  for (let i = 0; i < obstacles.length; i++) {
+    scene.remove(obstacles[i]);
+    obstacles.pop();
+  }
+  obstacles.length = 0;
+
+  for (let i = 0; i < scene.children.length; i++) {
+    const obj = scene.children[i];
+    if (/box_/i.test(obj?.name)) {
+      scene.remove(obj);
+    }
+  }
+  obstacles = [];
+
+  renderer.render(scene, camera);
+  bike.position.set(0, -18.7, 0);
+  car.position.set(0, -18.7, 0);
+
+  gameOverModal.querySelector(".pollution").innerHTML = score;
+  gameOverModal.classList.add("fade-out");
+
+  bluetoothConnected = false;
+}
 
 window.onload = () => {
   if (!navigator.userAgentData.mobile) {
@@ -494,36 +540,3 @@ window.onload = () => {
     });
   }
 };
-
-function reset() {
-  crash = false;
-  id = 0;
-  counter = 3;
-  score = 50;
-
-  gameStarted = false;
-  gameOver = false;
-  zOrientation = 0;
-
-  for (let i = 0; i < obstacles.length; i++) {
-    scene.remove(obstacles[i]);
-    obstacles.pop();
-  }
-  obstacles.length = 0;
-
-  for (let i = 0; i < scene.children.length; i++) {
-    const obj = scene.children[i];
-    if (/box_/i.test(obj?.name)) {
-      scene.remove(obj);
-    }
-  }
-  obstacles = [];
-
-  renderer.render(scene, camera);
-  bike.position.x = 0;
-
-  gameOverModal.querySelector(".score").innerHTML = score;
-  gameOverModal.classList.add("fade-out");
-
-  bluetoothConnected = false;
-}

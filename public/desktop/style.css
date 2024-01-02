@@ -1,3 +1,7 @@
+:root {
+  --progress: 50;
+}
+
 html {
   height: 100%;
 }
@@ -10,8 +14,33 @@ html {
   position: absolute;
   top: 5%;
   left: 50%;
-  transform: translate(0, -50%);
+  transform: translate(-50%, -50%);
   transition: transform 0.5s 4s;
+  color: rgb(200, 255, 0);
+}
+
+.score-container p {
+  color: white;
+  font-size: 1.25rem;
+  font-family: "Permanent Marker", sans-serif;
+  font-weight: 700;
+  margin: 0.25rem;
+}
+
+.pollution-bar {
+  width: 200px;
+  height: 18px;
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pollution-progress {
+  --width: calc(calc(var(--progress) + 5) * 1%);
+  height: 100%;
+  width: var(--width);
+  background: hsl(calc(105 - var(--progress)), 75%, 53%);
+  transition: width 0.3s ease;
 }
 
 canvas {
@@ -20,10 +49,10 @@ canvas {
 }
 
 .score-container #score {
-  color: white;
-  font-size: 1.25rem;
-  font-family: "Permanent Marker", sans-serif;
-  font-weight: 700;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, green, red);
+  transition: width 0.3s ease;
 }
 
 body {
@@ -181,6 +210,7 @@ button.audio.playing {
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  color: rgb(200, 255, 255);
   opacity: 1;
   z-index: 10;
   transition: opacity 1s ease-out;
