@@ -255,6 +255,17 @@ button {
   opacity: 1;
   z-index: 11;
   transition: opacity 1s ease-out;
+  margin-bottom: 1rem;
+}
+
+.game-over-container #fail {
+  display: none;
+  color: hsl(0, 100%, 50%);
+}
+
+.game-over-container #success {
+  display: none;
+  color: hsl(73, 100%, 50%);
 }
 
 .game-over-container.fade-out {
@@ -263,14 +274,14 @@ button {
 }
 
 .game-over-container h2 {
-  font-size: 5rem;
+  font-size: 4rem;
   margin: 20px;
   font-family: "Permanent Marker", sans-serif;
 }
 
 .game-over-container p {
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
   font-family: "Teko";
 }
 

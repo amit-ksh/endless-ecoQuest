@@ -280,7 +280,7 @@ function init() {
 function draw() {
   if (gameOver) {
     try {
-      explodeSound.play();
+      gameOverModal;
       sound.pause();
       clearInterval(changeVehicleInterval);
       clearInterval(scoreInterval);
@@ -288,7 +288,9 @@ function draw() {
       console.error("Error: Playing the sound" + e);
     }
 
-    gameOverModal.querySelector(".pollution").innerHTML = score;
+    gameOverModal.querySelector(
+      score <= 0 ? "#success" : "#fail",
+    ).style.display = "block";
     gameOverModal.classList.remove("fade-out");
 
     socket.emit("gameover");
@@ -349,6 +351,7 @@ function update() {
       score += 5;
       obstacles[i].hit = true;
       scene.remove(obstacles[i]);
+      explodeSound.play();
     } else {
       crash = false;
     }
@@ -373,7 +376,7 @@ function update() {
     }
   }
 
-  document.documentElement.style.setProperty("--progress", `${score}%`);
+  document.documentElement.style.setProperty("--progress", `${score}`);
 }
 
 function getRandomArbitrary(min, max) {
