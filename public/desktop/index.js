@@ -459,7 +459,6 @@ const switchToBike = () => {
 };
 
 function reset() {
-  crash = false;
   id = 0;
   counter = 3;
   score = 50;
@@ -486,8 +485,10 @@ function reset() {
   bike.position.set(0, -18.7, 0);
   car.position.set(0, -18.7, 0);
 
-  gameOverModal.querySelector(".pollution").innerHTML = score;
   gameOverModal.classList.add("fade-out");
+  if (!vechilesModal.classList.contains("fade-out")) {
+    vechilesModal.classList.remove("fade-out");
+  }
 
   bluetoothConnected = false;
 }
