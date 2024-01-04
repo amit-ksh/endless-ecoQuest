@@ -1,7 +1,11 @@
 let ready = false;
+let code;
+let connected = false;
+const socket = io();
+
 window.onload = function () {
-  const socket = io();
   const button = document.querySelector("button#start");
+  const codeInput = document.querySelector("input");
 
   if (navigator.userAgentData.mobile) {
     const mobileView = document.getElementById("mobile");
@@ -14,19 +18,34 @@ window.onload = function () {
   if (navigator.userAgentData.mobile) {
     function handleOrientation(e) {
       if (ready) {
-        socket.emit("orientation", e.gamma);
+        socket.emit("orientation", { code, value: e.gamma });
       }
     }
 
     window.addEventListener("deviceorientation", handleOrientation, true);
-    button.addEventListener("click", startGame);
+    button.addEventListener("click", () => {
+      code = codeInput.value.toUpperCase();
+      if (!code) {
+        alert("Please enter the code first!");
+        return;
+      }
 
-    function startGame() {
-      socket.emit("start");
-      ready = true;
-      button.innerHTML = "Playing!";
-    }
+      socket.emit("connect mobile", { code, connected });
+    });
   }
+
+  // start the game
+  socket.on("connected", () => {
+    socket.emit("start");
+    ready = true;
+    button.innerHTML = "Playing!";
+    codeInput.style.display = "none";
+    connected = true;
+  });
+
+  socket.on("wrong code", (msg) => {
+    alert(msg);
+  });
 
   // On gameover, reset
   socket.on("mobile gameover", () => {
@@ -34,3 +53,7 @@ window.onload = function () {
     ready = false;
   });
 };
+
+window.addEventListener("beforeunload", () => {
+  socket.emit("destroy", code);
+});

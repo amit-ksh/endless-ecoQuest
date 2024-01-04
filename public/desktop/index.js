@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let socket;
+let code;
 let container;
 let obstacles = [];
 let score = 50;
@@ -280,7 +281,6 @@ function init() {
 function draw() {
   if (gameOver) {
     try {
-      gameOverModal;
       sound.pause();
       clearInterval(changeVehicleInterval);
       clearInterval(scoreInterval);
@@ -288,6 +288,8 @@ function draw() {
       console.error("Error: Playing the sound" + e);
     }
 
+    if (vechilesModal.classList.contains("fade-out"))
+      vechilesModal.classList.add("fade-out");
     gameOverModal.querySelector(
       score <= 0 ? "#success" : "#fail",
     ).style.display = "block";
@@ -486,19 +488,26 @@ function reset() {
   car.position.set(0, -18.7, 0);
 
   gameOverModal.classList.add("fade-out");
-  if (!vechilesModal.classList.contains("fade-out")) {
-    vechilesModal.classList.remove("fade-out");
-  }
 
   bluetoothConnected = false;
 }
 
+function generateUUID() {
+  return Math.floor(Math.random() * 0xffff)
+    .toString(16)
+    .toUpperCase();
+}
+
+socket = io();
 window.onload = () => {
   if (!navigator.userAgentData.mobile) {
     let previousValue;
+    code = generateUUID();
+
     connectMessage = document.getElementById("connect");
-    connectMessage.querySelector("p strong").innerHTML =
+    connectMessage.querySelector("p strong#url").innerHTML =
       `${window.origin}/mobile`;
+    connectMessage.querySelector("#code").innerHTML = code;
 
     explodeSound = document.getElementById("explode_sound");
     loadingEl = document.querySelector(".loader");
@@ -516,7 +525,7 @@ window.onload = () => {
       }
     });
 
-    socket = io();
+    socket.emit("create room", code);
 
     socket.on("start game", () => {
       if (!gameOver) return;
@@ -544,3 +553,7 @@ window.onload = () => {
     });
   }
 };
+
+window.addEventListener("beforeunload", () => {
+  socket.emit("destroy", code);
+});
