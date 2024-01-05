@@ -4,14 +4,20 @@ Endless EcoQuest is an immersive endless racing experience built using Three.js 
 
 **The main aim of this game is to raise awareness about the pollution that we are creating by making small choices in out life. In the game, the player has to reduce the pollution level by ducking the plants and choosing the right vehicles for their ride.**
 
-- Live: [https://srmfjn-3000.csb.app/](https://dgnrp9-3000.csb.app/)
-- CodeSandbox: [https://codesandbox.io/p/github/amit-ksh/roadrunner/](https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest)
-- Github: [https://github.com/amit-ksh/roadrunner](https://github.com/amit-ksh/endless-ecoQuest/)
+- Live: [https://dgnrp9-3000.csb.app/](https://dgnrp9-3000.csb.app/)
+- CodeSandbox: [https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/](https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/main)
+- Github: [https://github.com/amit-ksh/endless-ecoQuest](https://github.com/amit-ksh/endless-ecoQuest/)
+
+## How to play
+
+1. Open this [link](https://dgnrp9-3000.csb.app/) in your desktop/laptop.
+2. Once the website is loaded, open this [link](https://dgnrp9-3000.csb.app//mobile) and enter code the shown on the desktop screen.
+3. Now, click the button `Play` to start playing the game.
 
 ## Controls
 
 - Mobile Device Orientation: Tilt your mobile device left or right to control the car's movements.
-- Use the `Left` & `Right` arrow buttons for changing the vehicles.
+- Use the `Left` & `Right` arrow keyboard buttons for changing the vehicles.
 
 ## Technologies
 
@@ -20,4 +26,8 @@ Endless EcoQuest is an immersive endless racing experience built using Three.js 
 
 ## Images
 
-// TODO: add images
+![Screenshot 2024-01-05 130315](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/d5e325b5-7946-4140-a9ed-6e734346366e)
+![Screenshot 2024-01-05 130322](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/4b13ced5-9455-44da-9418-881334711418)
+![Screenshot 2024-01-05 130329](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/b455e88e-b057-4755-8328-20d838739ef6)
+<img src="https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/3c8d00ab-855b-446c-b53b-9119e88b2968" width="400" height="800" />
+
