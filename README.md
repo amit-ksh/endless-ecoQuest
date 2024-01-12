@@ -1,8 +1,8 @@
 # Endless EcoQuest
 
-Endless EcoQuest is an immersive endless racing experience built using Three.js and Socket.io. In this game, you'll navigate through an endless track, controlling your car's movements using the orientation of your mobile device. 
+Endless EcoQuest is an immersive endless racing experience built using Three.js and Socket.io. In this game, you'll navigate through an endless track, controlling your car's movements using the orientation of your mobile device.
 
-**The main aim of this game is to raise awareness about the pollution that we are creating by making small choices in out life. In the game, the player has to reduce the pollution level by ducking the plants and choosing the right vehicles for their ride.**
+**The main aim of this game is to raise awareness about the pollution that we are creating by making small choices in our life. In the game, the player has to reduce the pollution level by ducking the plants and choosing the right vehicles for their ride.**
 
 - Live: [https://dgnrp9-3000.csb.app/](https://dgnrp9-3000.csb.app/)
 - CodeSandbox: [https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/](https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/main)
@@ -26,8 +26,9 @@ Endless EcoQuest is an immersive endless racing experience built using Three.js 
 
 ## Images
 
-![Screenshot 2024-01-05 130315](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/d5e325b5-7946-4140-a9ed-6e734346366e)
-![Screenshot 2024-01-05 130322](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/4b13ced5-9455-44da-9418-881334711418)
-![Screenshot 2024-01-05 130329](https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/b455e88e-b057-4755-8328-20d838739ef6)
-<img src="https://github.com/amit-ksh/endless-ecoQuest/assets/91947037/3c8d00ab-855b-446c-b53b-9119e88b2968" width="400" height="800" />
-
+![Screenshot 2024-01-05 130315](./game-intro.png)
+![Screenshot 2024-01-05 130315](./game-start.png)
+![Screenshot 2024-01-05 130322](./game-bicycle.png)
+![Screenshot 2024-01-05 130329](./game-car.png)
+![Screenshot 2024-01-05 130329](./game-over.png)
+<img src="./game-mobile.png" width="400" height="800" />
