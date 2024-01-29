@@ -4,14 +4,14 @@ Endless EcoQuest is an immersive endless racing experience built using Three.js 
 
 **The main aim of this game is to raise awareness about the pollution that we are creating by making small choices in our life. In the game, the player has to reduce the pollution level by ducking the plants and choosing the right vehicles for their ride.**
 
-- Live: [https://dgnrp9-3000.csb.app/](https://dgnrp9-3000.csb.app/)
-- CodeSandbox: [https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/](https://codesandbox.io/p/github/amit-ksh/endless-ecoQuest/main)
+- Live: [https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io](https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io)
+- CodeSandbox: [https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest](https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest)
 - Github: [https://github.com/amit-ksh/endless-ecoQuest](https://github.com/amit-ksh/endless-ecoQuest/)
 
 ## How to play
 
-1. Open this [link](https://dgnrp9-3000.csb.app/) in your desktop/laptop.
-2. Once the website is loaded, open this [link](https://dgnrp9-3000.csb.app//mobile) and enter code the shown on the desktop screen.
+1. Open this [link](https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io) in your desktop/laptop.
+2. Once the website is loaded, open this [link](https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io/mobile) and enter code the shown on the desktop screen.
 3. Now, click the button `Play` to start playing the game.
 
 ## Controls
