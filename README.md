@@ -4,8 +4,7 @@ Endless EcoQuest is an immersive endless racing experience built using Three.js 
 
 **The main aim of this game is to raise awareness about the pollution that we are creating by making small choices in our life. In the game, the player has to reduce the pollution level by ducking the plants and choosing the right vehicles for their ride.**
 
-- Live: [https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io](https://endlessecoquest-lny2--3000--6854296d.local-credentialless.webcontainer.io)
-- CodeSandbox: [https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest](https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest)
+- Stackblitz: [https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest](https://stackblitz.com/~/github.com/amit-ksh/endless-ecoQuest)
 - Github: [https://github.com/amit-ksh/endless-ecoQuest](https://github.com/amit-ksh/endless-ecoQuest/)
 
 ## How to play
